@@ -24,7 +24,6 @@ export const getCommodities = (initialYear, finishYear) => async (dispatch) => {
     try {
         const URLS_YEARS = getArrayOfYears(initialYear, finishYear);
         const data = await getAllData(URLS_YEARS);
-        console.log("allDataaaaaa", data.length, data[0], data[1]);
         let res = [];
         data.forEach((curSet) => {
             res = [...res, ...curSet];
@@ -56,6 +55,7 @@ async function fetchData(URL) {
         });
 }
 
+const API_URL = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=commodity-prices%40public&q=&facet=date&facet=commodity&refine.date=`;
 const getArrayOfYears = function (startDate, finishDate) {
     let arrayOfYears = [];
 
@@ -65,15 +65,10 @@ const getArrayOfYears = function (startDate, finishDate) {
         finishDate = startDate;
         startDate = tmp;
     }
-
     // Loop them
     let dif = startDate - finishDate;
     for (let i = 0; i <= dif; i++) {
-        arrayOfYears[
-            arrayOfYears.length
-        ] = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=commodity-prices%40public&q=&facet=date&facet=commodity&refine.date=${
-            startDate - i
-        }`;
+        arrayOfYears[arrayOfYears.length] = `${API_URL}${startDate - i}`;
     }
 
     return arrayOfYears;
